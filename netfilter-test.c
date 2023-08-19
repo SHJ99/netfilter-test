@@ -82,14 +82,9 @@ static uint32_t print_pkt (struct nfq_data *tb, int *stop)
     struct tcphdr *tcp_header = (struct tcphdr *)(data + ip_length);
     int tcp_length = tcp_header->doff * 4;
 
-    unsigned char *payload = data + ip_length + tcp_length;
-    int payload_length = ntohs(ip_header->tot_len) - ip_length - tcp_length;
-
-    char payload_str[payload_length + 1];
-    memcpy(payload_str, payload, payload_length);
-    payload_str[payload_length] = '\0';
+    const char *payload = data + ip_length + tcp_length;
 	
-    if (strstr(payload_str, warn_url)) {
+    if (strstr(payload, warn_url)) {
 		*stop=1;
 	} 
 	fputc('\n', stdout);
